@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<style>
+		
+		.toaster{
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			display: none;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-mid-offset-2">
+				<div id="gearLoader" class="toaster"><img src="gears.gif"></div>
+				<h1>Ajax</h1>
+
+				<h4>Table Data</h4>
+				<table class="table" id="personDataTable"></table>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script>
+
+    	
+
+	    	var root = 'http://jsonplaceholder.typicode.com';
+
+	    	$.ajax({
+	  			url: root + '/users/',
+	  			method: 'GET',
+	  			beforeSend: function(){
+	  				$('#gearLoader').show();
+	  			},
+	  			complete: function(){
+	  				$('#gearLoader').hide();
+	  			},
+	  			success: function(data, textStatus, jqXHR){
+	  				// since we are using jQuery, you dont need to parse response
+	  				drawTable(data);	
+	  			}
+			});
+
+			// Here is a loop, looping through the data on the server
+			function drawTable(data) {
+				for (var i = 0; i < data.length; i++) {
+					drawRow(data[i]);
+				}
+			}
+
+			function drawRow(rowData) {
+				console.log(rowData);
+				var row = $('<tr />')
+				$("#personDataTable").append(row); //this will append tr element to table.. keep its reference for a while we will add cells into it
+				row.append($('<td>' + rowData.id + '</td>'));
+				row.append($('<td>' + rowData.name + '</td>'));
+				row.append($('<td>' + rowData.email + '</td>'));
+				row.append($('<td>' + rowData.website + '</td>'));
+			}
+
+    </script>
+</body>
+</html>
